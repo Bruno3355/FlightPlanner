@@ -1,0 +1,26 @@
+span {
+    width: 10px;
+    height: 150px;
+    background-color: #425568;
+    transform: rotate(45deg) ;
+    animation: animate 15s linear infinite;
+    animation-duration: calc(150s / var(--i));
+}
+
+span:nth-child(even){
+    transform: translateX(205px) rotate(45deg);
+}
+
+span:nth-child(odd){
+    height: 75px;
+}
+
+@keyframes animate {
+    0% {
+        transform: translateX(-80vw) translateY(10vh) scale(0) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100vw) translateY(-180vh) scale(1) rotate(45deg);
+    }
+}
+
