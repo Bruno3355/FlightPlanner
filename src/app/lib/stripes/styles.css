@@ -1,8 +1,8 @@
 span {
-    width: 10px;
+    width: 5px;
     height: 150px;
     background-color: #425568;
-    transform: rotate(45deg) ;
+    transform: rotate(50deg) ;
     animation: animate 15s linear infinite;
     animation-duration: calc(150s / var(--i));
 }

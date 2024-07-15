@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,10 +11,14 @@ const config: Config = {
   theme: {
     extend: {
 
+      fontFamily: {
+        'h1': ['Aclonica', 'sans-serif']
+      },
+
       colors: {
         'primary':'#19232D',
-        'secondary': '1F2E3C',
-        'accent': 'DCBB87'
+        'secondary': '#1F2E3C',
+        'accent': '#DCBB87'
       },
 
       backgroundImage: {
