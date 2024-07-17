@@ -1,6 +1,6 @@
 {
-  "name": "collaborativework",
   "type": "module",
+  "name": "collaborativework",
   "version": "0.1.0",
   "private": true,
   "scripts": {
