@@ -12,7 +12,8 @@ const config: Config = {
     extend: {
 
       animation: {
-        flyairplane: 'flyairplane 1s linear forwards'
+        flyairplane: 'flyairplane 1s linear forwards',
+        changePage: 'changePage 1s linear forwards'
       },
 
       keyframes: {
@@ -22,13 +23,22 @@ const config: Config = {
           '30%': {transform: 'translateY(-10vh) rotateZ(-45deg)'},
           '80%': {transform: 'scale(5) translateY(-10vh) rotate(-45deg)'},
           '100%': {transform: 'translateY(-100vh) rotateZ(-45deg)'}
+        },
+
+        changePage: {
+          '0%': {opacity: '1'},
+          '90%': {opacity: '0'},
+          '100%': {display: 'none', opacity: '0'}
         }
       },
 
       colors: {
         'primary':'#19232D',
         'secondary': '#1F2E3C',
-        'accent': '#DCBB87'
+        'accent': '#DCBB87',
+        'white': '#FFFFFF',
+        'grey': '#D9D9D9',
+        'grey_light': '#F8F7FA'
       },
 
       backgroundImage: {
