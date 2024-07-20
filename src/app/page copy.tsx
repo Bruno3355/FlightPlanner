@@ -2,17 +2,15 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import Card from "./lib/components/organisms/Card/Card";
-import SidebarMenu from "./lib/components/organisms/SidebarMenu/SidebarMenu";
 import Stripes from "./lib/components/molecules/Stripes/Stripes";
-
+import Card from "./lib/components/organisms/Card/Card";
 
 export default function Home() {
   const [buttonHover, setButtonHover] = useState<boolean | null>();
   const [active, setActive] = useState<boolean | null>(false);
 
   return (
-    <div className="w-full h-screen grid grid-cols-[100px,auto] grid-rows-1 items-center justify-items-center bg-grey_light">
+    <div className="w-full h-screen grid grid-cols-[100px,auto] grid-rows-1 items-center justify-items-center bg-secondary">
       <div className={`relative col-start-1 col-end-3 row-start-1 row-end-1 grid justify-between overflow-hidden h-screen w-full -z-1 ${active ? "animate-changePage" : ""}`}>
         <Stripes />
       </div>
@@ -29,7 +27,7 @@ export default function Home() {
           }>Begin</button>
       </main>
       <Card classAtributes={`col-start-1 col-end-3 row-start-1 row-end-1`}/>
-      <SidebarMenu active={active}/>
+      <aside className={`col-start-1 col-end-1 row-start-1 row-end-1 bg-white w-full h-full transition-all duration-1000 ${active ? 'opacity-100' : 'opacity-0'}`}></aside>
 
     </div>
 
