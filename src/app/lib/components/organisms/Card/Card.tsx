@@ -11,6 +11,6 @@ export default function Card(props: CardProps) {
   console.log(props)
 
   return (
-    <div className={`rounded-2xl bg-grey_light w-[640px] h-[428px] ${props.classAtributes}`}>index</div>
+    <div className={`w-full h-full rounded-2xl bg-white drop-shadow-xl p-4 ${props.classAtributes}`}>index</div>
   )
 }
