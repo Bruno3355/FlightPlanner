@@ -10,7 +10,7 @@ export default function Stripes(props: AppProps) {
   return (
     <div className={`h-full w-full absolute grid items-center content-center transition-all duration-500 ${props.active ? 'opacity-0' : 'opacity-100'}`}>
         {speedValues.map((value, index) => {
-          return <span style={{ ['--i' as any]: value, }} key={index}></span>
+          return <span className="w-[5px] h-[150px] bg-[#425568] rotate-[50deg] animate-stripes [&>*:nth-child(odd)]:h-[75px] [&>*:nth-child(even)]:translate-x-[205px] [&>*:nth-child(even)]:rotate-[45deg] calculateSpeed" style={{ ['--i' as any]: value, }} key={index}></span>
         })}
 
     </div>

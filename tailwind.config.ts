@@ -13,7 +13,8 @@ const config: Config = {
 
       animation: {
         flyairplane: 'flyairplane 1s linear forwards',
-        changePage: 'changePage 1s linear forwards'
+        changePage: 'changePage 1s linear forwards',
+        stripes: 'stripes 15s linear infinite'
       },
 
       keyframes: {
@@ -29,6 +30,15 @@ const config: Config = {
           '0%': {opacity: '1'},
           '90%': {opacity: '0'},
           '100%': {display: 'none', opacity: '0'}
+        },
+
+        stripes: {
+          '0%': {
+            transform: 'translateX(-80vw) translateY(10vh) scale(0) rotate(45deg)'
+        },
+        '100%': {
+            transform: 'translateX(100vw) translateY(-180vh) scale(1) rotate(45deg)'
+        }
         }
       },
 
