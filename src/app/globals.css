@@ -18,6 +18,15 @@
   box-sizing: border-box;
 }
 
+input[type='number']::-webkit-outer-spin-button,
+        input[type='number']::-webkit-inner-spin-button,
+        input[type='number'] {
+          -webkit-appearance: none;
+          margin: 0;
+          appearance: textfield;
+          -moz-appearance: textfield;
+        }
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

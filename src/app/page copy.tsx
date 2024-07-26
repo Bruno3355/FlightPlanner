@@ -30,7 +30,6 @@ export default function Home() {
         </section>
         <button className="w-36 h-14 rounded-2xl bg-accent text-xl font-medium hover:bg-white active:bg-green-400" onMouseOver={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} onClick={() => {
           setActive((prev) => !prev);
-          console.log(active);
         }
           }>Begin</button>
       </main>

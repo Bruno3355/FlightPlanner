@@ -7,11 +7,205 @@ import SidebarMenu from "./lib/components/organisms/SidebarMenu/SidebarMenu";
 import Stripes from "./lib/components/molecules/Stripes/Stripes";
 import FourGridContainer from "./lib/components/templates/FourGridContainer/FourGridContainer";
 
+interface flightRelease {
+  step: number | null;
+  alternate: number | null;
+  reserve: number | null;
+  minimumRequired: number | null;
+  additional: number | null;
+}
+
+interface takeoffWeightCalculation {
+  totalOnBoardTime: number | null;
+  totalOnBoardFuel: number | null;
+  maximumTakeoffWeight: number;
+  basicEmptyWeight: number;
+  totalAvailableWeight: number;
+  minimumFuelRequired: number | null;
+  creWeight: number | null;
+  maximumPayload: number | null;
+}
+
+interface weightAndBalanceCalculations {
+  emptyBasicWeight: number;
+  emptyBasicWeightArm: number;
+  emptyBasicWeightMomentum: number;
+
+  frontSeatsOccupantsWeight: number | null;
+  frontSeatsOccupantsArm: number;
+  frontSeatsOccupantsMomentum: number | null;
+
+  rearSeatsOccupantsWeight: number | null;
+  rearSeatsOccupantsArm: number;
+  rearSeatsOccupantsMomentum: number | null;
+
+  luggageRackWeight: number | null;
+  luggageRackArm: number;
+  luggageRackMomentum: number | null;
+
+  zeroFuelWeight: number | null;
+  zeroFuelArm: number | null;
+  zeroFuelMomentum: number | null;
+
+  fuelWeight: number | null;
+  fuelArm: number;
+  fuelMomentum: number | null;
+
+  takeoffWeight: number | null;
+  takeoffArm: number | null;
+  takeoffMomentum: number | null;
+
+  tripFuelWeight: number | null;
+  tripFuelArm: number;
+  tripFuelMomentum: number | null;
+
+  landingWeight: number | null;
+  landingArm: number | null;
+  landingMomentum: number | null;
+}
 
 export default function Home() {
   const [buttonHover, setButtonHover] = useState<boolean | null>();
   const [active, setActive] = useState<boolean | null>(false);
+  const [flightReleaseData, setFlightReleaseData] = useState<flightRelease>({
+    step: null,
+    alternate: null,
+    reserve: null,
+    minimumRequired: null,
+    additional: null,
+  });
 
+  const [takeoffWeightCalculationData, setTakeoffWeightCalculationData] =
+    useState<takeoffWeightCalculation>({
+      totalOnBoardTime: null,
+      totalOnBoardFuel: null,
+      maximumTakeoffWeight: 1247,
+      basicEmptyWeight: 827,
+      totalAvailableWeight: 420,
+      minimumFuelRequired: null,
+      creWeight: null,
+      maximumPayload: null,
+    });
+
+  const [
+    weightAndBalanceCalculationsData,
+    setWeightAndBalanceCalculationsData,
+  ] = useState<weightAndBalanceCalculations>({
+    emptyBasicWeight: 827.7,
+    emptyBasicWeightArm: 2.174,
+    emptyBasicWeightMomentum: 1799.5,
+
+    frontSeatsOccupantsWeight: null,
+    frontSeatsOccupantsArm: 2.045,
+    frontSeatsOccupantsMomentum: null,
+
+    rearSeatsOccupantsWeight: null,
+    rearSeatsOccupantsArm: 3.0,
+    rearSeatsOccupantsMomentum: null,
+
+    luggageRackWeight: null,
+    luggageRackArm: 3.627,
+    luggageRackMomentum: null,
+
+    zeroFuelWeight: null,
+    zeroFuelArm: null,
+    zeroFuelMomentum: null,
+
+    fuelWeight: null,
+    fuelArm: 2.413,
+    fuelMomentum: null,
+
+    takeoffWeight: null,
+    takeoffArm: null,
+    takeoffMomentum: null,
+
+    tripFuelWeight: null,
+    tripFuelArm: 2.413,
+    tripFuelMomentum: null,
+
+    landingWeight: null,
+    landingArm: null,
+    landingMomentum: null,
+  });
+
+  const converTimeToMinutes = (time: string): number => {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const minimumRequiredTime = () => {
+    if (
+      flightReleaseData.step &&
+      flightReleaseData.alternate &&
+      flightReleaseData.reserve
+    ) {
+      const totalMinutes =
+        flightReleaseData.step +
+        flightReleaseData.alternate +
+        flightReleaseData.reserve;
+      const hours = String(Math.floor(totalMinutes / 60));
+      const minutes = String(totalMinutes % 60);
+      return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
+    } else {
+      return 0;
+    }
+  };
+
+  const timeInputSetChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    objectKey: string
+  ) => {
+    const timeString = e.target.value;
+    const minutes = converTimeToMinutes(timeString);
+    setFlightReleaseData((prev: flightRelease) => ({
+      ...prev,
+      [objectKey]: minutes,
+    }));
+  };
+
+  const verifyIfValueIsNumber = (value: any) => {
+    return typeof value === "number" && !Number.isNaN(value);
+  };
+
+  const totalGallonsPerMinute = (obj: any): number => {
+    return Number((obj * 0.2).toFixed(2));
+  };
+
+  const totalMinimumRequiredGallons = (): number => {
+    if (
+      totalGallonsPerMinute(flightReleaseData.step) &&
+      totalGallonsPerMinute(flightReleaseData.alternate) &&
+      totalGallonsPerMinute(flightReleaseData.reserve)
+    ) {
+      return (
+        totalGallonsPerMinute(flightReleaseData.step) +
+        totalGallonsPerMinute(flightReleaseData.alternate) +
+        totalGallonsPerMinute(flightReleaseData.reserve)
+      );
+    } else {
+      return 0;
+    }
+  };
+
+  const totalOnBoard = () => {
+    if (
+      flightReleaseData.step &&
+      flightReleaseData.alternate &&
+      flightReleaseData.reserve && 
+      flightReleaseData.additional
+    ) {
+      const totalMinutes =
+        flightReleaseData.step +
+        flightReleaseData.alternate +
+        flightReleaseData.reserve +
+        flightReleaseData.additional;
+      const hours = String(Math.floor(totalMinutes / 60));
+      const minutes = String(totalMinutes % 60);
+      return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
+    } else {
+      return 0;
+    }
+  }
 
   return (
     <div className="w-screen h-screen relative bg-primary overflow-hidden">
@@ -47,7 +241,6 @@ export default function Home() {
           onMouseLeave={() => setButtonHover(false)}
           onClick={() => {
             setActive((prev) => !prev);
-            console.log(active);
           }}
         >
           Begin
@@ -76,44 +269,72 @@ export default function Home() {
               <tr>
                 <th scope="row">Step</th>
                 <td>
-                  <input type="time" className="w-full h-full text-center" />
+                  <input
+                    type="time"
+                    className="w-full h-full text-center"
+                    onChange={(e) => timeInputSetChange(e, "step")}
+                  />
                 </td>
-                <td>Lorem Ipsum</td>
+                <td>
+                  {verifyIfValueIsNumber(flightReleaseData.step) &&
+                    totalGallonsPerMinute(flightReleaseData.step)}
+                </td>
               </tr>
               <tr>
                 <th scope="row">Alternate</th>
                 <td>
-                  <input type="time" className="w-full h-full text-center" />
+                  <input
+                    type="time"
+                    className="w-full h-full text-center"
+                    onChange={(e) => timeInputSetChange(e, "alternate")}
+                  />
                 </td>
-                <td>Lorem Ipsum</td>
+                <td>
+                  {verifyIfValueIsNumber(flightReleaseData.alternate) &&
+                    totalGallonsPerMinute(flightReleaseData.alternate)}
+                </td>
               </tr>
               <tr>
                 <th scope="row">Reserve</th>
                 <td>
-                  <input type="time" className="w-full h-full text-center" />
+                  <input
+                    type="time"
+                    className="w-full h-full text-center"
+                    onChange={(e) => timeInputSetChange(e, "reserve")}
+                  />
                 </td>
-                <td>Lorem Ipsum</td>
+                <td>
+                  {verifyIfValueIsNumber(flightReleaseData.reserve) &&
+                    totalGallonsPerMinute(flightReleaseData.reserve)}
+                </td>
               </tr>
               <tr>
                 <th scope="row">Minimum Required</th>
-                <td>
-                  Lorem Ipsum
-                </td>
-                <td>Lorem Ipsum</td>
+                <td>{minimumRequiredTime()}</td>
+                <td>{totalMinimumRequiredGallons()}</td>
               </tr>
               <tr>
                 <th scope="row">Additional</th>
                 <td>
-                  <input type="time" className="w-full h-full text-center" />
+                  <input
+                    type="time"
+                    className="w-full h-full text-center"
+                    onChange={(e) => timeInputSetChange(e, "additional")}
+                  />
                 </td>
-                <td>Lorem Ipsum</td>
+                <td>
+                {verifyIfValueIsNumber(flightReleaseData.additional) &&
+                    totalGallonsPerMinute(flightReleaseData.additional)}
+                </td>
               </tr>
             </tbody>
             <tfoot className="bg-grey">
               <tr>
                 <th scope="row">Total on Board</th>
-                <td>Lorem Ipsum</td>
-                <td>Lorem Ipsum</td>
+                <td>
+{totalOnBoard()}
+                </td>
+                <td>{verifyIfValueIsNumber(flightReleaseData.additional) && ( totalMinimumRequiredGallons() + totalGallonsPerMinute(flightReleaseData.additional))}</td>
               </tr>
             </tfoot>
           </table>
@@ -145,21 +366,33 @@ export default function Home() {
               </tr>
               <tr>
                 <th scope="row">Front Seats Occupants</th>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
                 <td>2,045</td>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
               </tr>
               <tr>
                 <th scope="row">Rear Seats Occupants</th>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
                 <td>3,000</td>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
               </tr>
               <tr>
                 <th scope="row">Luggage Rack (Max. 91 kgf)</th>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
                 <td>3,627</td>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
               </tr>
               <tr>
                 <th scope="row">Zero Fuel Weight</th>
@@ -169,9 +402,14 @@ export default function Home() {
               </tr>
               <tr>
                 <th scope="row">Fuel (_ Gal x 2,73 kgf/Gal)</th>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
+
                 <td>2,413</td>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
               </tr>
               <tr>
                 <th scope="row">Takeoff Weight (Max. 1.247 kgf)</th>
@@ -181,9 +419,13 @@ export default function Home() {
               </tr>
               <tr>
                 <th scope="row">Trip Fuel (_ Gal x 2,73 kgf/Gal)</th>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
                 <td>2,413</td>
-                <td>Lorem ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
               </tr>
               <tr>
                 <th scope="row">Landing Weight (Max. 1.247 kgf)</th>
@@ -225,7 +467,9 @@ export default function Home() {
               </tr>
               <tr>
                 <th>Crew Weight</th>
-                <td>Lorem Ipsum</td>
+                <td>
+                  <input type="number" min="0" />
+                </td>
               </tr>
               <tr>
                 <th scope="row" className="font-semibold bg-grey_light">
@@ -249,6 +493,9 @@ export default function Home() {
             />
             <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
               Save
+            </button>
+            <button onClick={() => console.log(flightReleaseData)}>
+              Console
             </button>
           </div>
         </Card>
