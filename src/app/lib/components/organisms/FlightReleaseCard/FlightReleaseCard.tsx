@@ -1,4 +1,5 @@
-import {useState} from 'react'
+import {useState, useContext} from 'react'
+import { CalculationsDataContext } from '@/app/page';
 import Card from '../../molecules/Card/Card'
 import { minimumRequiredTime, timeInputSetChange, verifyIfValueIsNumber, totalGallonsPerMinute, totalMinimumRequiredGallons, totalOnBoard } from '@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions'
 
@@ -11,6 +12,8 @@ interface flightRelease {
   }
 
 export default function FlightReleaseCard() {
+    const value = useContext(CalculationsDataContext);
+
     const [flightReleaseData, setFlightReleaseData] = useState<flightRelease>({
         step: null,
         alternate: null,
@@ -106,6 +109,7 @@ export default function FlightReleaseCard() {
         </tr>
       </tfoot>
     </table>
+    <button onClick={() => console.log(value)}>Test</button>
   </Card>
 )
 }
