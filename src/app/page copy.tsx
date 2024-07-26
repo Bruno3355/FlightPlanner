@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import Card from "./lib/components/organisms/Card/Card";
+import Card from "./lib/components/molecules/Card/Card";
 import SidebarMenu from "./lib/components/organisms/SidebarMenu/SidebarMenu";
 import Stripes from "./lib/components/molecules/Stripes/Stripes";
 

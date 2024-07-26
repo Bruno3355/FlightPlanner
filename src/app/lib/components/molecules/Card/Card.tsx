@@ -1,6 +1,6 @@
 import React from "react"
 
-interface CardProps extends React.ComponentProps<'div'>{
+export interface CardProps extends React.ComponentProps<'div'>{
   width?: string,
   height?: string,
   classAtributes?: string,

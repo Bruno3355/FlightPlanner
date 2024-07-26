@@ -1,18 +1,18 @@
 "use client";
-import { useState, useReducer } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
-import Card from "./lib/components/organisms/Card/Card";
+import Card from "./lib/components/molecules/Card/Card";
 import SidebarMenu from "./lib/components/organisms/SidebarMenu/SidebarMenu";
 import Stripes from "./lib/components/molecules/Stripes/Stripes";
 import FourGridContainer from "./lib/components/templates/FourGridContainer/FourGridContainer";
+import FlightReleaseCard from "./lib/components/organisms/FlightReleaseCard/FlightReleaseCard";
 
-interface flightRelease {
-  step: number | null;
-  alternate: number | null;
-  reserve: number | null;
+
+interface globalValuesInterface {
+  stepGallons: number | null;
   minimumRequired: number | null;
-  additional: number | null;
+  totalGallons: number | null;
 }
 
 interface takeoffWeightCalculation {
@@ -67,13 +67,14 @@ interface weightAndBalanceCalculations {
 export default function Home() {
   const [buttonHover, setButtonHover] = useState<boolean | null>();
   const [active, setActive] = useState<boolean | null>(false);
-  const [flightReleaseData, setFlightReleaseData] = useState<flightRelease>({
-    step: null,
-    alternate: null,
-    reserve: null,
-    minimumRequired: null,
-    additional: null,
-  });
+  const [globalValues, setGlobalValues] = useState<globalValuesInterface>(
+    {
+      stepGallons: null,
+      minimumRequired: null,
+      totalGallons: null,
+    }
+  )
+
 
   const [takeoffWeightCalculationData, setTakeoffWeightCalculationData] =
     useState<takeoffWeightCalculation>({
@@ -128,84 +129,7 @@ export default function Home() {
     landingMomentum: null,
   });
 
-  const converTimeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
-  };
-
-  const minimumRequiredTime = () => {
-    if (
-      flightReleaseData.step &&
-      flightReleaseData.alternate &&
-      flightReleaseData.reserve
-    ) {
-      const totalMinutes =
-        flightReleaseData.step +
-        flightReleaseData.alternate +
-        flightReleaseData.reserve;
-      const hours = String(Math.floor(totalMinutes / 60));
-      const minutes = String(totalMinutes % 60);
-      return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
-    } else {
-      return 0;
-    }
-  };
-
-  const timeInputSetChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    objectKey: string
-  ) => {
-    const timeString = e.target.value;
-    const minutes = converTimeToMinutes(timeString);
-    setFlightReleaseData((prev: flightRelease) => ({
-      ...prev,
-      [objectKey]: minutes,
-    }));
-  };
-
-  const verifyIfValueIsNumber = (value: any) => {
-    return typeof value === "number" && !Number.isNaN(value);
-  };
-
-  const totalGallonsPerMinute = (obj: any): number => {
-    return Number((obj * 0.2).toFixed(2));
-  };
-
-  const totalMinimumRequiredGallons = (): number => {
-    if (
-      totalGallonsPerMinute(flightReleaseData.step) &&
-      totalGallonsPerMinute(flightReleaseData.alternate) &&
-      totalGallonsPerMinute(flightReleaseData.reserve)
-    ) {
-      return (
-        totalGallonsPerMinute(flightReleaseData.step) +
-        totalGallonsPerMinute(flightReleaseData.alternate) +
-        totalGallonsPerMinute(flightReleaseData.reserve)
-      );
-    } else {
-      return 0;
-    }
-  };
-
-  const totalOnBoard = () => {
-    if (
-      flightReleaseData.step &&
-      flightReleaseData.alternate &&
-      flightReleaseData.reserve && 
-      flightReleaseData.additional
-    ) {
-      const totalMinutes =
-        flightReleaseData.step +
-        flightReleaseData.alternate +
-        flightReleaseData.reserve +
-        flightReleaseData.additional;
-      const hours = String(Math.floor(totalMinutes / 60));
-      const minutes = String(totalMinutes % 60);
-      return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
-    } else {
-      return 0;
-    }
-  }
+ 
 
   return (
     <div className="w-screen h-screen relative bg-primary overflow-hidden">
@@ -250,95 +174,7 @@ export default function Home() {
       <SidebarMenu active={active} />
 
       <FourGridContainer active={active}>
-        <Card
-          classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[20%,80%]`}
-        >
-          <div className="flex flex-col justify-center">
-            <h2 className="text-2xl font-semibold underline">Flight Release</h2>
-            <h3 className="font-medium">Autonomy calculation</h3>
-          </div>
-          <table>
-            <thead className="bg-grey">
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Time (hh:mm)</th>
-                <th scope="col">Fuel (US Gallons)</th>
-              </tr>
-            </thead>
-            <tbody className="[&>tr>th]:text-left [&>tr>th]:pl-2 [&>tr>td]:text-center">
-              <tr>
-                <th scope="row">Step</th>
-                <td>
-                  <input
-                    type="time"
-                    className="w-full h-full text-center"
-                    onChange={(e) => timeInputSetChange(e, "step")}
-                  />
-                </td>
-                <td>
-                  {verifyIfValueIsNumber(flightReleaseData.step) &&
-                    totalGallonsPerMinute(flightReleaseData.step)}
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Alternate</th>
-                <td>
-                  <input
-                    type="time"
-                    className="w-full h-full text-center"
-                    onChange={(e) => timeInputSetChange(e, "alternate")}
-                  />
-                </td>
-                <td>
-                  {verifyIfValueIsNumber(flightReleaseData.alternate) &&
-                    totalGallonsPerMinute(flightReleaseData.alternate)}
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Reserve</th>
-                <td>
-                  <input
-                    type="time"
-                    className="w-full h-full text-center"
-                    onChange={(e) => timeInputSetChange(e, "reserve")}
-                  />
-                </td>
-                <td>
-                  {verifyIfValueIsNumber(flightReleaseData.reserve) &&
-                    totalGallonsPerMinute(flightReleaseData.reserve)}
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Minimum Required</th>
-                <td>{minimumRequiredTime()}</td>
-                <td>{totalMinimumRequiredGallons()}</td>
-              </tr>
-              <tr>
-                <th scope="row">Additional</th>
-                <td>
-                  <input
-                    type="time"
-                    className="w-full h-full text-center"
-                    onChange={(e) => timeInputSetChange(e, "additional")}
-                  />
-                </td>
-                <td>
-                {verifyIfValueIsNumber(flightReleaseData.additional) &&
-                    totalGallonsPerMinute(flightReleaseData.additional)}
-                </td>
-              </tr>
-            </tbody>
-            <tfoot className="bg-grey">
-              <tr>
-                <th scope="row">Total on Board</th>
-                <td>
-{totalOnBoard()}
-                </td>
-                <td>{verifyIfValueIsNumber(flightReleaseData.additional) && ( totalMinimumRequiredGallons() + totalGallonsPerMinute(flightReleaseData.additional))}</td>
-              </tr>
-            </tfoot>
-          </table>
-        </Card>
+          <FlightReleaseCard />
 
         <Card
           classAtributes={`col-start-3 col-end-5 row-start-1 row-end-4 grid grid-cols-1 grid-rows-[20%,80%]`}
@@ -493,9 +329,6 @@ export default function Home() {
             />
             <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
               Save
-            </button>
-            <button onClick={() => console.log(flightReleaseData)}>
-              Console
             </button>
           </div>
         </Card>
