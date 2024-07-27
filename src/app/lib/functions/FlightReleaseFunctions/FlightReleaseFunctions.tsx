@@ -1,38 +1,21 @@
-
 export const converTimeToMinutes = (time: string): number => {
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
 };
 
-export const minimumRequiredTime = (step: any | number, alternate:any, reserve:any) => {
-  if (
-    step &&
-    alternate &&
-    reserve
-  ) {
-    const totalMinutes =
-      step +
-      alternate +
-      reserve;
+export const minimumRequiredTime = (
+  step: any | number,
+  alternate: any,
+  reserve: any
+) => {
+  if (step && alternate && reserve) {
+    const totalMinutes = step + alternate + reserve;
     const hours = String(Math.floor(totalMinutes / 60));
     const minutes = String(totalMinutes % 60);
     return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
   } else {
     return 0;
   }
-};
-
-export const timeInputSetChange = (
-  e: React.ChangeEvent<HTMLInputElement>,
-  objectKey: string,
-  setState: React.Dispatch<React.SetStateAction<any>> 
-) => {
-  const timeString = e.target.value;
-  const minutes = converTimeToMinutes(timeString);
-  setState((prev: any) => ({
-    ...prev,
-    [objectKey]: minutes,
-  }));
 };
 
 export const verifyIfValueIsNumber = (value: any) => {
@@ -43,34 +26,35 @@ export const totalGallonsPerMinute = (obj: any): number => {
   return Number((obj * 0.2).toFixed(2));
 };
 
-export const totalMinimumRequiredGallons = (step: any, alternate: any, reserve: any): number => {
+
+export const totalMinimumRequiredGallons = (
+  step: any,
+  alternate: any,
+  reserve: any
+): number => {
   if (
     totalGallonsPerMinute(step) &&
     totalGallonsPerMinute(alternate) &&
     totalGallonsPerMinute(reserve)
   ) {
-    return (
+    const result =
       totalGallonsPerMinute(step) +
       totalGallonsPerMinute(alternate) +
-      totalGallonsPerMinute(reserve)
-    );
+      totalGallonsPerMinute(reserve);
+    return result;
   } else {
     return 0;
   }
 };
 
-export const totalOnBoard = (step: any, alternate: any, reserve: any, additional: any) => {
-  if (
-    step &&
-    alternate &&
-    reserve &&
-    additional
-  ) {
-    const totalMinutes =
-      step +
-      alternate +
-      reserve +
-      additional;
+export const totalOnBoard = (
+  step: any,
+  alternate: any,
+  reserve: any,
+  additional: any
+) => {
+  if (step && alternate && reserve && additional) {
+    const totalMinutes = step + alternate + reserve + additional;
     const hours = String(Math.floor(totalMinutes / 60));
     const minutes = String(totalMinutes % 60);
     return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
