@@ -41,6 +41,13 @@ export default function FlightReleaseCard() {
     updateFlightReleaseData(key, minutes);
   };
 
+  const totalBoardGallons =() => {
+    if(verifyIfValueIsNumber(flightReleaseData.additional) &&
+    (flightReleaseData.minimumRequired && verifyIfValueIsNumber(flightReleaseData.minimumRequired) && flightReleaseData.additional)){
+      return flightReleaseData.minimumRequired + totalGallonsPerMinute(flightReleaseData.additional)
+    }
+  }
+
   return (
     <Card classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[20%,80%]`}>
       <div className="flex flex-col justify-center">
@@ -124,8 +131,7 @@ export default function FlightReleaseCard() {
             <td>
               {totalOnBoard(flightReleaseData.step || 0, flightReleaseData.alternate || 0, flightReleaseData.reserve || 0, flightReleaseData.additional || 0)}
             </td>
-            <td>{verifyIfValueIsNumber(flightReleaseData.additional) &&
-                (flightReleaseData.minimumRequired || 0 + totalGallonsPerMinute(flightReleaseData.additional))}
+            <td>{totalBoardGallons()}
             </td>
           </tr>
         </tfoot>
