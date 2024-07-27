@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { CalculationsDataContext } from '@/app/page';
 import Card from '../../molecules/Card/Card';
 import { minimumRequiredTime, verifyIfValueIsNumber, totalGallonsPerMinute, totalOnBoard, converTimeToMinutes } from '@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions';
 
@@ -11,6 +12,7 @@ interface FlightRelease {
 }
 
 export default function FlightReleaseCard() {
+  const {globalValues, setGlobalValues} = useContext(CalculationsDataContext);
   const [flightReleaseData, setFlightReleaseData] = useState<FlightRelease>({
     step: null,
     alternate: null,
@@ -23,7 +25,6 @@ export default function FlightReleaseCard() {
     setFlightReleaseData(prev => {
       const updatedData = { ...prev, [objectKey]: value };
 
-      // Atualizar minimumRequired sempre que step, alternate ou reserve mudar
       if (updatedData.step !== null && updatedData.alternate !== null && updatedData.reserve !== null) {
         const newMinimumRequired = totalGallonsPerMinute(updatedData.step) +
                                     totalGallonsPerMinute(updatedData.alternate) +
@@ -47,6 +48,12 @@ export default function FlightReleaseCard() {
       return flightReleaseData.minimumRequired + totalGallonsPerMinute(flightReleaseData.additional)
     }
   }
+
+  useEffect(() => {
+    // Atualize o contexto sempre que `minimumRequired` mudar
+    setGlobalValues((prev:any) => ({...prev, minimumRequired: flightReleaseData.minimumRequired}));
+  }, [flightReleaseData.step, flightReleaseData.alternate, flightReleaseData.reserve, setGlobalValues]);
+  //Pending context through useEffect
 
   return (
     <Card classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[20%,80%]`}>
@@ -136,7 +143,7 @@ export default function FlightReleaseCard() {
           </tr>
         </tfoot>
       </table>
-      <button onClick={() => console.log(flightReleaseData.minimumRequired)}>Console</button>
+      <button onClick={() => console.log(globalValues.minimumRequired)}>Console</button>
     </Card>
   );
 }
