@@ -4,21 +4,23 @@ import Card from '../../molecules/Card/Card';
 import { minimumRequiredTime, verifyIfValueIsNumber, totalGallonsPerMinute, totalOnBoard, converTimeToMinutes } from '@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions';
 
 interface FlightRelease {
-  step: number | null;
-  alternate: number | null;
-  reserve: number | null;
-  minimumRequired: number | null;
-  additional: number | null;
+  step: number | null,
+  alternate: number | null,
+  reserve: number | null,
+  minimumRequired: number | null,
+  additional: number | null,
+  totalGallons: number | null
 }
 
 export default function FlightReleaseCard() {
-  const {globalValues, setGlobalValues} = useContext(CalculationsDataContext);
+  const {setGlobalValues} = useContext(CalculationsDataContext);
   const [flightReleaseData, setFlightReleaseData] = useState<FlightRelease>({
     step: null,
     alternate: null,
     reserve: null,
     minimumRequired: null,
     additional: null,
+    totalGallons: null
   });
 
   const updateFlightReleaseData = (objectKey: string, value: number | null) => {
@@ -51,8 +53,9 @@ export default function FlightReleaseCard() {
 
   useEffect(() => {
     // Atualize o contexto sempre que `minimumRequired` mudar
-    setGlobalValues((prev:any) => ({...prev, minimumRequired: flightReleaseData.minimumRequired}));
-  }, [flightReleaseData.step, flightReleaseData.alternate, flightReleaseData.reserve, setGlobalValues]);
+    
+    setGlobalValues((prev:any) => ({...prev, stepGallons: totalGallonsPerMinute(flightReleaseData.step), minimumRequired: flightReleaseData.minimumRequired, totalGallons: totalBoardGallons()}));
+  }, [flightReleaseData.step, flightReleaseData.alternate, flightReleaseData.reserve, flightReleaseData.additional, setGlobalValues]);
   //Pending context through useEffect
 
   return (
@@ -143,7 +146,6 @@ export default function FlightReleaseCard() {
           </tr>
         </tfoot>
       </table>
-      <button onClick={() => console.log(globalValues.minimumRequired)}>Console</button>
     </Card>
   );
 }

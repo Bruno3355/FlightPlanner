@@ -1,5 +1,5 @@
 "use client";
-import { useState} from "react";
+import { useState, createContext } from "react";
 import Image from "next/image";
 
 import Card from "./lib/components/molecules/Card/Card";
@@ -63,6 +63,8 @@ interface weightAndBalanceCalculations {
   landingArm: number | null;
   landingMomentum: number | null;
 }
+export const CalculationsDataContext = createContext<any>({});
+
 
 export default function Home() {
 
@@ -175,164 +177,167 @@ export default function Home() {
       <SidebarMenu active={active} />
 
       <FourGridContainer active={active}>
-          <FlightReleaseCard />
+        <CalculationsDataContext.Provider value={{globalValues, setGlobalValues}}>
+        <FlightReleaseCard />
 
-        <Card
-          classAtributes={`col-start-3 col-end-5 row-start-1 row-end-4 grid grid-cols-1 grid-rows-[20%,80%]`}
-        >
-          <div className="flex flex-col justify-center">
-            <h2 className="text-2xl font-semibold underline">
-              Weight and Balance Calculations
-            </h2>
-          </div>
-          <table>
-            <thead className="bg-grey">
-              <tr>
-                <th scope="col">Items</th>
-                <th scope="col">Weight (kgf)</th>
-                <th scope="col">Arm (m)</th>
-                <th scope="col">Momentum (kgf x m)</th>
-              </tr>
-            </thead>
-            <tbody className="[&>tr>th]:text-left [&>tr>th]:pl-2 [&>tr>td]:text-center">
-              <tr>
-                <th scope="row">Empty basic Weight</th>
-                <td>827,7</td>
-                <td>2,174</td>
-                <td>1799,5</td>
-              </tr>
-              <tr>
-                <th scope="row">Front Seats Occupants</th>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-                <td>2,045</td>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Rear Seats Occupants</th>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-                <td>3,000</td>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Luggage Rack (Max. 91 kgf)</th>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-                <td>3,627</td>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Zero Fuel Weight</th>
-                <td>Lorem ipsum</td>
-                <td>Lorem ipsum</td>
-                <td>Lorem ipsum</td>
-              </tr>
-              <tr>
-                <th scope="row">Fuel (_ Gal x 2,73 kgf/Gal)</th>
-                <td>
-                  <input type="number" min="0" />
-                </td>
+<Card
+  classAtributes={`col-start-3 col-end-5 row-start-1 row-end-4 grid grid-cols-1 grid-rows-[20%,80%]`}
+>
+  <div className="flex flex-col justify-center">
+    <h2 className="text-2xl font-semibold underline">
+      Weight and Balance Calculations
+    </h2>
+  </div>
+  <table>
+    <thead className="bg-grey">
+      <tr>
+        <th scope="col">Items</th>
+        <th scope="col">Weight (kgf)</th>
+        <th scope="col">Arm (m)</th>
+        <th scope="col">Momentum (kgf x m)</th>
+      </tr>
+    </thead>
+    <tbody className="[&>tr>th]:text-left [&>tr>th]:pl-2 [&>tr>td]:text-center">
+      <tr>
+        <th scope="row">Empty basic Weight</th>
+        <td>827,7</td>
+        <td>2,174</td>
+        <td>1799,5</td>
+      </tr>
+      <tr>
+        <th scope="row">Front Seats Occupants</th>
+        <td>
+          <input type="number" min="0" />
+        </td>
+        <td>2,045</td>
+        <td>
+          <input type="number" min="0" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Rear Seats Occupants</th>
+        <td>
+          <input type="number" min="0" />
+        </td>
+        <td>3,000</td>
+        <td>
+          <input type="number" min="0" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Luggage Rack (Max. 91 kgf)</th>
+        <td>
+          <input type="number" min="0" />
+        </td>
+        <td>3,627</td>
+        <td>
+          <input type="number" min="0" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Zero Fuel Weight</th>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+      </tr>
+      <tr>
+        <th scope="row">Fuel (_ Gal x 2,73 kgf/Gal)</th>
+        <td>
+          <input type="number" min="0" />
+        </td>
 
-                <td>2,413</td>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Takeoff Weight (Max. 1.247 kgf)</th>
-                <td>Lorem ipsum</td>
-                <td>Lorem ipsum</td>
-                <td>Lorem ipsum</td>
-              </tr>
-              <tr>
-                <th scope="row">Trip Fuel (_ Gal x 2,73 kgf/Gal)</th>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-                <td>2,413</td>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Landing Weight (Max. 1.247 kgf)</th>
-                <td>Lorem ipsum</td>
-                <td>Lorem ipsum</td>
-                <td>Lorem ipsum</td>
-              </tr>
-            </tbody>
-          </table>
-        </Card>
+        <td>2,413</td>
+        <td>
+          <input type="number" min="0" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Takeoff Weight (Max. 1.247 kgf)</th>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+      </tr>
+      <tr>
+        <th scope="row">Trip Fuel (_ Gal x 2,73 kgf/Gal)</th>
+        <td>
+          <input type="number" min="0" />
+        </td>
+        <td>2,413</td>
+        <td>
+          <input type="number" min="0" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Landing Weight (Max. 1.247 kgf)</th>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+      </tr>
+    </tbody>
+  </table>
+</Card>
 
-        <Card
-          classAtributes={`col-start-1 col-end-3 row-start-3 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
-        >
-          <div className="flex flex-col justify-center">
-            <h2 className="text-2xl font-semibold underline">
-              Takeoff Weight Calculation
-            </h2>
-          </div>
-          <table>
-            <tbody>
-              <tr>
-                <th scope="col">Maximum Takeoff Weight</th>
-                <td className="font-semibold">1.247 Kgf</td>
-              </tr>
-              <tr>
-                <th scope="row">Basic Empty Weight (BEW)</th>
-                <td>827 Kgf</td>
-              </tr>
-              <tr>
-                <th scope="row" className="font-semibold bg-grey_light">
-                  Total Available Weight
-                </th>
-                <td className="bg-grey_light font-semibold">420 kgf</td>
-              </tr>
-              <tr>
-                <th scope="row">Minimum Fuel Required (MFR)</th>
-                <td>Lorem Ipsum</td>
-              </tr>
-              <tr>
-                <th>Crew Weight</th>
-                <td>
-                  <input type="number" min="0" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" className="font-semibold bg-grey_light">
-                  Maximum Payload
-                </th>
-                <td className="bg-grey_light">Lorem Ipsum</td>
-              </tr>
-            </tbody>
-          </table>
-        </Card>
+<Card
+  classAtributes={`col-start-1 col-end-3 row-start-3 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
+>
+  <div className="flex flex-col justify-center">
+    <h2 className="text-2xl font-semibold underline">
+      Takeoff Weight Calculation
+    </h2>
+  </div>
+  <table>
+    <tbody>
+      <tr>
+        <th scope="col">Maximum Takeoff Weight</th>
+        <td className="font-semibold">1.247 Kgf</td>
+      </tr>
+      <tr>
+        <th scope="row">Basic Empty Weight (BEW)</th>
+        <td>827 Kgf</td>
+      </tr>
+      <tr>
+        <th scope="row" className="font-semibold bg-grey_light">
+          Total Available Weight
+        </th>
+        <td className="bg-grey_light font-semibold">420 kgf</td>
+      </tr>
+      <tr>
+        <th scope="row">Minimum Fuel Required (MFR)</th>
+        <td>Lorem Ipsum</td>
+      </tr>
+      <tr>
+        <th>Crew Weight</th>
+        <td>
+          <input type="number" min="0" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row" className="font-semibold bg-grey_light">
+          Maximum Payload
+        </th>
+        <td className="bg-grey_light">Lorem Ipsum</td>
+      </tr>
+    </tbody>
+  </table>
+</Card>
 
-        <Card
-          classAtributes={`col-start-3 col-end-5 row-start-4 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
-        >
-          <h2 className="text-2xl font-semibold underline">Save Flight Plan</h2>
-          <div className="flex flex-col items-center gap-4">
-            <input
-              type="text"
-              placeholder="Insert flight plan name"
-              className="w-full h-14 rounded-2xl border-b-grey border-2 p-3"
-            />
-            <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
-              Save
-            </button>
-          </div>
-        </Card>
+<Card
+  classAtributes={`col-start-3 col-end-5 row-start-4 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
+>
+  <h2 className="text-2xl font-semibold underline">Save Flight Plan</h2>
+  <div className="flex flex-col items-center gap-4">
+    <input
+      type="text"
+      placeholder="Insert flight plan name"
+      className="w-full h-14 rounded-2xl border-b-grey border-2 p-3"
+    />
+    <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
+      Save
+    </button>
+  </div>
+</Card>
+        </CalculationsDataContext.Provider>
+          
       </FourGridContainer>
     </div>
   );
