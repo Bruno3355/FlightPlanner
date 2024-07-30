@@ -1,36 +1,47 @@
-import { useState, useEffect, useContext } from 'react';
-import { CalculationsDataContext } from '@/app/page';
-import Card from '../../molecules/Card/Card';
-import { minimumRequiredTime, verifyIfValueIsNumber, totalGallonsPerMinute, totalOnBoard, converTimeToMinutes } from '@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions';
+import { useState, useEffect, useContext } from "react";
+import { CalculationsDataContext } from "@/app/page";
+import Card from "../../molecules/Card/Card";
+import {
+  minimumRequiredTime,
+  verifyIfValueIsNumber,
+  totalGallonsPerMinute,
+  totalOnBoard,
+  converTimeToMinutes,
+} from "@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions";
 
 interface FlightRelease {
-  step: number | null,
-  alternate: number | null,
-  reserve: number | null,
-  minimumRequired: number | null,
-  additional: number | null,
-  totalGallons: number | null
+  step: number | null;
+  alternate: number | null;
+  reserve: number | null;
+  minimumRequired: number | null;
+  additional: number | null;
+  totalGallons: number | null;
 }
 
 export default function FlightReleaseCard() {
-  const {setGlobalValues} = useContext(CalculationsDataContext);
+  const { setGlobalValues } = useContext(CalculationsDataContext);
   const [flightReleaseData, setFlightReleaseData] = useState<FlightRelease>({
     step: null,
     alternate: null,
     reserve: null,
     minimumRequired: null,
     additional: null,
-    totalGallons: null
+    totalGallons: null,
   });
 
   const updateFlightReleaseData = (objectKey: string, value: number | null) => {
-    setFlightReleaseData(prev => {
+    setFlightReleaseData((prev) => {
       const updatedData = { ...prev, [objectKey]: value };
 
-      if (updatedData.step !== null && updatedData.alternate !== null && updatedData.reserve !== null) {
-        const newMinimumRequired = totalGallonsPerMinute(updatedData.step) +
-                                    totalGallonsPerMinute(updatedData.alternate) +
-                                    totalGallonsPerMinute(updatedData.reserve);
+      if (
+        updatedData.step !== null &&
+        updatedData.alternate !== null &&
+        updatedData.reserve !== null
+      ) {
+        const newMinimumRequired =
+          totalGallonsPerMinute(updatedData.step) +
+          totalGallonsPerMinute(updatedData.alternate) +
+          totalGallonsPerMinute(updatedData.reserve);
         updatedData.minimumRequired = newMinimumRequired;
       }
 
@@ -38,28 +49,48 @@ export default function FlightReleaseCard() {
     });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: string
+  ) => {
     const timeString = e.target.value;
     const minutes = converTimeToMinutes(timeString);
     updateFlightReleaseData(key, minutes);
   };
 
-  const totalBoardGallons =() => {
-    if(verifyIfValueIsNumber(flightReleaseData.additional) &&
-    (flightReleaseData.minimumRequired && verifyIfValueIsNumber(flightReleaseData.minimumRequired) && flightReleaseData.additional)){
-      return flightReleaseData.minimumRequired + totalGallonsPerMinute(flightReleaseData.additional)
+  const totalBoardGallons = () => {
+    if (
+      verifyIfValueIsNumber(flightReleaseData.additional) &&
+      flightReleaseData.minimumRequired &&
+      verifyIfValueIsNumber(flightReleaseData.minimumRequired) &&
+      flightReleaseData.additional
+    ) {
+      return (
+        flightReleaseData.minimumRequired +
+        totalGallonsPerMinute(flightReleaseData.additional)
+      );
     }
-  }
+  };
 
   useEffect(() => {
-    // Atualize o contexto sempre que `minimumRequired` mudar
-    
-    setGlobalValues((prev:any) => ({...prev, stepGallons: totalGallonsPerMinute(flightReleaseData.step), minimumRequired: flightReleaseData.minimumRequired, totalGallons: totalBoardGallons()}));
-  }, [flightReleaseData.step, flightReleaseData.alternate, flightReleaseData.reserve, flightReleaseData.additional, setGlobalValues]);
-  //Pending context through useEffect
+    setGlobalValues((prev: any) => ({
+      ...prev,
+      stepGallons: totalGallonsPerMinute(flightReleaseData.step),
+      minimumRequired: flightReleaseData.minimumRequired,
+      totalGallons: totalBoardGallons(),
+    }));
+  }, [
+    flightReleaseData.step,
+    flightReleaseData.alternate,
+    flightReleaseData.reserve,
+    flightReleaseData.additional,
+    setGlobalValues,
+  ]);
 
   return (
-    <Card classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[20%,80%]`}>
+    <Card
+      classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[20%,80%]`}
+    >
       <div className="flex flex-col justify-center">
         <h2 className="text-2xl font-semibold underline">Flight Release</h2>
         <h3 className="font-medium">Autonomy calculation</h3>
@@ -79,7 +110,7 @@ export default function FlightReleaseCard() {
               <input
                 type="time"
                 className="w-full h-full text-center"
-                onChange={(e) => handleInputChange(e, 'step')}
+                onChange={(e) => handleInputChange(e, "step")}
               />
             </td>
             <td>
@@ -93,7 +124,7 @@ export default function FlightReleaseCard() {
               <input
                 type="time"
                 className="w-full h-full text-center"
-                onChange={(e) => handleInputChange(e, 'alternate')}
+                onChange={(e) => handleInputChange(e, "alternate")}
               />
             </td>
             <td>
@@ -107,7 +138,7 @@ export default function FlightReleaseCard() {
               <input
                 type="time"
                 className="w-full h-full text-center"
-                onChange={(e) => handleInputChange(e, 'reserve')}
+                onChange={(e) => handleInputChange(e, "reserve")}
               />
             </td>
             <td>
@@ -117,8 +148,17 @@ export default function FlightReleaseCard() {
           </tr>
           <tr>
             <th scope="row">Minimum Required</th>
-            <td>{minimumRequiredTime(flightReleaseData.step || 0, flightReleaseData.alternate || 0, flightReleaseData.reserve || 0)}</td>
-            <td>{verifyIfValueIsNumber(flightReleaseData.minimumRequired) && flightReleaseData.minimumRequired}</td>
+            <td>
+              {minimumRequiredTime(
+                flightReleaseData.step || 0,
+                flightReleaseData.alternate || 0,
+                flightReleaseData.reserve || 0
+              )}
+            </td>
+            <td>
+              {verifyIfValueIsNumber(flightReleaseData.minimumRequired) &&
+                flightReleaseData.minimumRequired}
+            </td>
           </tr>
           <tr>
             <th scope="row">Additional</th>
@@ -126,7 +166,7 @@ export default function FlightReleaseCard() {
               <input
                 type="time"
                 className="w-full h-full text-center"
-                onChange={(e) => handleInputChange(e, 'additional')}
+                onChange={(e) => handleInputChange(e, "additional")}
               />
             </td>
             <td>
@@ -139,10 +179,14 @@ export default function FlightReleaseCard() {
           <tr>
             <th scope="row">Total on Board</th>
             <td>
-              {totalOnBoard(flightReleaseData.step || 0, flightReleaseData.alternate || 0, flightReleaseData.reserve || 0, flightReleaseData.additional || 0)}
+              {totalOnBoard(
+                flightReleaseData.step || 0,
+                flightReleaseData.alternate || 0,
+                flightReleaseData.reserve || 0,
+                flightReleaseData.additional || 0
+              )}
             </td>
-            <td>{totalBoardGallons()}
-            </td>
+            <td>{totalBoardGallons()}</td>
           </tr>
         </tfoot>
       </table>

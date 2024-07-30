@@ -22,8 +22,13 @@ export const verifyIfValueIsNumber = (value: any) => {
   return typeof value === "number" && !Number.isNaN(value);
 };
 
-export const totalGallonsPerMinute = (obj: any): number => {
-  return Number((obj * 0.2).toFixed(2));
+export const totalGallonsPerMinute = (obj: any) => {
+  if(typeof obj === "number" && !Number.isNaN(obj)){
+    return Number((obj * 0.2).toFixed(2));
+  } else {
+    return -999999;
+    //Try to fix it
+  }
 };
 
 
