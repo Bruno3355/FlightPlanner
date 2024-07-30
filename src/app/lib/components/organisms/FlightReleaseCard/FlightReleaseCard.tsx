@@ -13,7 +13,7 @@ interface FlightRelease {
   step: number | null;
   alternate: number | null;
   reserve: number | null;
-  minimumRequired: number | null;
+  minimumRequired: any;
   additional: number | null;
   totalGallons: number | null;
 }
@@ -38,11 +38,20 @@ export default function FlightReleaseCard() {
         updatedData.alternate !== null &&
         updatedData.reserve !== null
       ) {
-        const newMinimumRequired =
-          totalGallonsPerMinute(updatedData.step) +
-          totalGallonsPerMinute(updatedData.alternate) +
-          totalGallonsPerMinute(updatedData.reserve);
+        const stepTotalGallons = totalGallonsPerMinute(updatedData.step);
+        const alternateTotalGallons = totalGallonsPerMinute(updatedData.alternate);
+        const reserveTotalGallons = totalGallonsPerMinute(updatedData.reserve);
+
+        if (stepTotalGallons < 0 || alternateTotalGallons < 0 || reserveTotalGallons < 0) {
+          const newMinimumRequired = "";
+          updatedData.minimumRequired = newMinimumRequired;
+        } else {
+          const newMinimumRequired =
+          stepTotalGallons +
+          alternateTotalGallons +
+          reserveTotalGallons;
         updatedData.minimumRequired = newMinimumRequired;
+        }
       }
 
       return updatedData;
@@ -150,9 +159,9 @@ export default function FlightReleaseCard() {
             <th scope="row">Minimum Required</th>
             <td>
               {minimumRequiredTime(
-                flightReleaseData.step || 0,
-                flightReleaseData.alternate || 0,
-                flightReleaseData.reserve || 0
+                flightReleaseData.step,
+                flightReleaseData.alternate,
+                flightReleaseData.reserve
               )}
             </td>
             <td>
@@ -180,10 +189,10 @@ export default function FlightReleaseCard() {
             <th scope="row">Total on Board</th>
             <td>
               {totalOnBoard(
-                flightReleaseData.step || 0,
-                flightReleaseData.alternate || 0,
-                flightReleaseData.reserve || 0,
-                flightReleaseData.additional || 0
+                flightReleaseData.step,
+                flightReleaseData.alternate,
+                flightReleaseData.reserve,
+                flightReleaseData.additional
               )}
             </td>
             <td>{totalBoardGallons()}</td>

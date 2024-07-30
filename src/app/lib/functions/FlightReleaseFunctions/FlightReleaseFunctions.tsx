@@ -14,7 +14,7 @@ export const minimumRequiredTime = (
     const minutes = String(totalMinutes % 60);
     return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
   } else {
-    return 0;
+    return "";
   }
 };
 
@@ -23,32 +23,11 @@ export const verifyIfValueIsNumber = (value: any) => {
 };
 
 export const totalGallonsPerMinute = (obj: any) => {
-  if(typeof obj === "number" && !Number.isNaN(obj)){
-    return Number((obj * 0.2).toFixed(2));
+  const value = obj;
+  if(value && typeof value === "number" && !Number.isNaN(value)){
+    return Number((value * 0.2).toFixed(2));
   } else {
-    return -999999;
-    //Try to fix it
-  }
-};
-
-
-export const totalMinimumRequiredGallons = (
-  step: any,
-  alternate: any,
-  reserve: any
-): number => {
-  if (
-    totalGallonsPerMinute(step) &&
-    totalGallonsPerMinute(alternate) &&
-    totalGallonsPerMinute(reserve)
-  ) {
-    const result =
-      totalGallonsPerMinute(step) +
-      totalGallonsPerMinute(alternate) +
-      totalGallonsPerMinute(reserve);
-    return result;
-  } else {
-    return 0;
+    return -1;
   }
 };
 
@@ -64,6 +43,6 @@ export const totalOnBoard = (
     const minutes = String(totalMinutes % 60);
     return `${hours.padStart(2, "0")}:${minutes.padEnd(2, "0")}`;
   } else {
-    return 0;
+    return "";
   }
 };

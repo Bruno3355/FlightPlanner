@@ -1,6 +1,7 @@
 import {useState, useContext} from 'react'
 import Card from '../../molecules/Card/Card'
 import { CalculationsDataContext } from '@/app/page';
+import isNumberKey from '@/app/lib/functions/isNumberKey/isNumberKey';
 
 
 
@@ -33,7 +34,7 @@ import { CalculationsDataContext } from '@/app/page';
     takeoffArm: number | null;
     takeoffMomentum: number | null;
   
-    tripFuelWeight: number | null;
+    // tripFuelWeight: number | null;
     tripFuelArm: number;
     tripFuelMomentum: number | null;
   
@@ -78,7 +79,7 @@ export default function weightAndBalanceCalculationsCard() {
         takeoffArm: null,
         takeoffMomentum: null,
     
-        tripFuelWeight: null,
+        // tripFuelWeight: null,
         tripFuelArm: 2.413,
         tripFuelMomentum: null,
     
@@ -87,6 +88,14 @@ export default function weightAndBalanceCalculationsCard() {
         landingMomentum: null,
       });
 
+      const handleInput = (e: React.ChangeEvent<HTMLInputElement>, key: string, armName:string, resultState: string) => {
+        const armValue = weightAndBalanceCalculationsData[armName as keyof weightAndBalanceCalculations];
+        if (e.currentTarget.value !== null && armValue) {
+          const value = e.currentTarget.valueAsNumber;
+          const momentumResult = value * armValue;
+          setWeightAndBalanceCalculationsData((prev) => ({...prev, [key]:value, [resultState]:momentumResult}))
+        }
+      }
 
   return (
     <Card
@@ -116,31 +125,31 @@ export default function weightAndBalanceCalculationsCard() {
       <tr>
         <th scope="row">Front Seats Occupants</th>
         <td>
-          <input type="number" min="0" />
+          <input type="number" min="0"  className="border-2 border-b-grey rounded text-center" onChange={(e) => handleInput(e, "frontSeatsOccupantsWeight", "frontSeatsOccupantsArm", "frontSeatsOccupantsMomentum")} onKeyDown={isNumberKey}/>
         </td>
         <td>2,045</td>
         <td>
-          <input type="number" min="0" />
+          {weightAndBalanceCalculationsData.frontSeatsOccupantsMomentum || ""}
         </td>
       </tr>
       <tr>
         <th scope="row">Rear Seats Occupants</th>
         <td>
-          <input type="number" min="0" />
+          <input type="number" min="0" className="border-2 border-b-grey rounded text-center" onChange={(e) => handleInput(e, "rearSeatsOccupantsWeight", "rearSeatsOccupantsArm", "rearSeatsOccupantsMomentum")} onKeyDown={isNumberKey}/>
         </td>
         <td>3,000</td>
         <td>
-          <input type="number" min="0" />
+          Rear seat calc
         </td>
       </tr>
       <tr>
         <th scope="row">Luggage Rack (Max. 91 kgf)</th>
         <td>
-          <input type="number" min="0" />
+          <input type="number" min="0" className="border-2 border-b-grey rounded text-center" onChange={(e) => handleInput(e, "luggageRackWeight", "luggageRackArm", "luggageRackMomentum")} onKeyDown={isNumberKey}/>
         </td>
         <td>3,627</td>
         <td>
-          <input type="number" min="0" />
+          Luggage rack calc
         </td>
       </tr>
       <tr>
@@ -152,12 +161,12 @@ export default function weightAndBalanceCalculationsCard() {
       <tr>
         <th scope="row">Fuel (_ Gal x 2,73 kgf/Gal)</th>
         <td>
-          <input type="number" min="0" />
+          <input type="number" min="0" className="border-2 border-b-grey rounded text-center" onChange={(e) => handleInput(e, "fuelWeight", "fuelArm", "fuelMomentum")} onKeyDown={isNumberKey} />
         </td>
 
         <td>2,413</td>
         <td>
-          <input type="number" min="0" />
+          Fuel calc
         </td>
       </tr>
       <tr>
@@ -169,11 +178,12 @@ export default function weightAndBalanceCalculationsCard() {
       <tr>
         <th scope="row">Trip Fuel (_ Gal x 2,73 kgf/Gal)</th>
         <td>
-          <input type="number" min="0" />
+          {globalValues && globalValues.minimumRequired}
+          {/* <input type="number" min="0" className="border-2 border-b-grey rounded text-center" onChange={(e) => handleInput(e, "tripFuelWeight")} onKeyDown={isNumberKey}/> */}
         </td>
         <td>2,413</td>
         <td>
-          <input type="number" min="0" />
+          Trip fuel calc
         </td>
       </tr>
       <tr>
@@ -184,6 +194,7 @@ export default function weightAndBalanceCalculationsCard() {
       </tr>
     </tbody>
   </table>
+  <button onClick={() => console.log(weightAndBalanceCalculationsData)}>Console</button>
 </Card>
   )
 }

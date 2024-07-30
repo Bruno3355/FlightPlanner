@@ -16,27 +16,16 @@ interface globalValuesInterface {
   totalGallons: number | null;
 }
 
-
 export const CalculationsDataContext = createContext<any>({});
 
-
 export default function Home() {
-
   const [buttonHover, setButtonHover] = useState<boolean | null>();
   const [active, setActive] = useState<boolean | null>(false);
-  const [globalValues, setGlobalValues] = useState<globalValuesInterface>(
-    {
-      stepGallons: null,
-      minimumRequired: null,
-      totalGallons: null,
-    }
-  )
-
-
-  
- 
-
- 
+  const [globalValues, setGlobalValues] = useState<globalValuesInterface>({
+    stepGallons: null,
+    minimumRequired: null,
+    totalGallons: null,
+  });
 
   return (
     <div className="w-screen h-screen relative bg-primary overflow-hidden">
@@ -81,28 +70,31 @@ export default function Home() {
       <SidebarMenu active={active} />
 
       <FourGridContainer active={active}>
-        <CalculationsDataContext.Provider value={{globalValues, setGlobalValues}}>
-        <FlightReleaseCard />
-      <WeightAndBalanceCalculationsCard />
-      <TakeoffWeightCalculationCard />
+        <CalculationsDataContext.Provider
+          value={{ globalValues, setGlobalValues }}
+        >
+          <FlightReleaseCard />
+          <WeightAndBalanceCalculationsCard />
+          <TakeoffWeightCalculationCard />
 
-      <Card
-  classAtributes={`col-start-3 col-end-5 row-start-4 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
->
-  <h2 className="text-2xl font-semibold underline">Save Flight Plan</h2>
-  <div className="flex flex-col items-center gap-4">
-    <input
-      type="text"
-      placeholder="Insert flight plan name"
-      className="w-full h-14 rounded-2xl border-b-grey border-2 p-3"
-    />
-    <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
-      Save
-    </button>
-  </div>
-</Card>
+          <Card
+            classAtributes={`col-start-3 col-end-5 row-start-4 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
+          >
+            <h2 className="text-2xl font-semibold underline">
+              Save Flight Plan
+            </h2>
+            <div className="flex flex-col items-center gap-4">
+              <input
+                type="text"
+                placeholder="Insert flight plan name"
+                className="w-full h-14 rounded-2xl border-b-grey border-2 p-3"
+              />
+              <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
+                Save
+              </button>
+            </div>
+          </Card>
         </CalculationsDataContext.Provider>
-          
       </FourGridContainer>
     </div>
   );
