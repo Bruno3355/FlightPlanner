@@ -9,12 +9,14 @@ import FourGridContainer from "./lib/components/templates/FourGridContainer/Four
 import FlightReleaseCard from "./lib/components/organisms/FlightReleaseCard/FlightReleaseCard";
 import WeightAndBalanceCalculationsCard from "./lib/components/organisms/WeightAndBalanceCalculationsCard/WeightAndBalanceCalculationsCard";
 import TakeoffWeightCalculationCard from "./lib/components/organisms/TakeoffWeightCalculationCard/TakeoffWeightCalculationCard";
+import SaveFlightPlan from "./lib/components/organisms/SaveFlightPlan/SaveFlightPlan";
 
 interface globalValuesInterface {
   stepGallons: number | null;
   minimumRequired: number | null;
   totalGallons: number | null;
 }
+
 
 export const CalculationsDataContext = createContext<any>({});
 
@@ -44,7 +46,7 @@ export default function Home() {
           src="airplane.svg"
           className={`${
             active ? "animate-flyairplane" : ""
-          } transition-all duration-500 `}
+          } transition-all duration-1000 `}
           width={101}
           height={101}
           alt="Airplane"
@@ -67,33 +69,17 @@ export default function Home() {
         </button>
       </main>
 
-      <SidebarMenu active={active} />
+      <SidebarMenu active={active} setActive={setActive}/>
 
       <FourGridContainer active={active}>
         <CalculationsDataContext.Provider
           value={{ globalValues, setGlobalValues }}
         >
           <FlightReleaseCard />
-          <WeightAndBalanceCalculationsCard />
           <TakeoffWeightCalculationCard />
-
-          <Card
-            classAtributes={`col-start-3 col-end-5 row-start-4 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
-          >
-            <h2 className="text-2xl font-semibold underline">
-              Save Flight Plan
-            </h2>
-            <div className="flex flex-col items-center gap-4">
-              <input
-                type="text"
-                placeholder="Insert flight plan name"
-                className="w-full h-14 rounded-2xl border-b-grey border-2 p-3"
-              />
-              <button className="w-36 h-10 rounded-2xl bg-primary text-xl font-medium text-white hover:bg-accent hover:text-primary active:bg-green-400 self-end">
-                Save
-              </button>
-            </div>
-          </Card>
+          <WeightAndBalanceCalculationsCard />
+          <SaveFlightPlan />
+          
         </CalculationsDataContext.Provider>
       </FourGridContainer>
     </div>

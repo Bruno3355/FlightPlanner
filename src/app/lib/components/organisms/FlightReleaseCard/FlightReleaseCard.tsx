@@ -98,9 +98,9 @@ export default function FlightReleaseCard() {
 
   return (
     <Card
-      classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[20%,80%]`}
+      classAtributes={`col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-[max-content,80%]`}
     >
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center h-20">
         <h2 className="text-2xl font-semibold underline">Flight Release</h2>
         <h3 className="font-medium">Autonomy calculation</h3>
       </div>
@@ -118,7 +118,7 @@ export default function FlightReleaseCard() {
             <td>
               <input
                 type="time"
-                className="w-full h-full text-center"
+                className="w-full h-full border-2 border-b-grey rounded text-center"
                 onChange={(e) => handleInputChange(e, "step")}
               />
             </td>
@@ -132,7 +132,7 @@ export default function FlightReleaseCard() {
             <td>
               <input
                 type="time"
-                className="w-full h-full text-center"
+                className="w-full h-full border-2 border-b-grey rounded text-center"
                 onChange={(e) => handleInputChange(e, "alternate")}
               />
             </td>
@@ -146,7 +146,7 @@ export default function FlightReleaseCard() {
             <td>
               <input
                 type="time"
-                className="w-full h-full text-center"
+                className="w-full h-full border-2 border-b-grey rounded text-center"
                 onChange={(e) => handleInputChange(e, "reserve")}
               />
             </td>
@@ -174,7 +174,7 @@ export default function FlightReleaseCard() {
             <td>
               <input
                 type="time"
-                className="w-full h-full text-center"
+                className="w-full h-full border-2 border-b-grey rounded text-center"
                 onChange={(e) => handleInputChange(e, "additional")}
               />
             </td>

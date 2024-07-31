@@ -14,7 +14,7 @@ interface takeoffWeightCalculation {
 }
 
 export default function TakeoffWeightCalculationCard() {
-  const { globalValues, setGlobalValues } = useContext(CalculationsDataContext);
+  const { globalValues } = useContext(CalculationsDataContext);
   const [takeoffWeightCalculationData, setTakeoffWeightCalculationData] =
     useState<takeoffWeightCalculation>({
       totalOnBoardTime: null,
@@ -51,9 +51,9 @@ export default function TakeoffWeightCalculationCard() {
 
   return (
     <Card
-      classAtributes={`col-start-1 col-end-3 row-start-3 row-end-5 grid grid-cols-1 grid-rows-[20%,80%]`}
+      classAtributes={`col-start-1 col-end-3 row-start-3 row-end-5 grid grid-cols-1 grid-rows-[max-content,80%]`}
     >
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center h-20">
         <h2 className="text-2xl font-semibold underline">
           Takeoff Weight Calculation
         </h2>
@@ -76,7 +76,7 @@ export default function TakeoffWeightCalculationCard() {
           </tr>
           <tr>
             <th scope="row">Minimum Fuel Required (MFR)</th>
-            <td>{globalValues && globalValues.minimumRequired}</td>
+            <td>{globalValues && globalValues.minimumRequired} kgf</td>
           </tr>
           <tr>
             <th>Crew Weight</th>
@@ -86,14 +86,14 @@ export default function TakeoffWeightCalculationCard() {
                 className="border-2 border-b-grey rounded text-center"
                 onKeyDown={isNumberKey}
                 onChange={handleInput}
-              />
+              /> kgf
             </td>
           </tr>
           <tr>
             <th scope="row" className="font-semibold bg-grey_light">
               Maximum Payload
             </th>
-            <td className="bg-grey_light">{displayMaximumPayload()}</td>
+            <td className="bg-grey_light">{displayMaximumPayload()} kgf</td>
           </tr>
         </tbody>
       </table>

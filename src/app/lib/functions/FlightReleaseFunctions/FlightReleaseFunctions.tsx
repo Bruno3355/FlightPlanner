@@ -27,7 +27,7 @@ export const totalGallonsPerMinute = (obj: any) => {
   if(value && typeof value === "number" && !Number.isNaN(value)){
     return Number((value * 0.2).toFixed(2));
   } else {
-    return -1;
+    return 0;
   }
 };
 
@@ -46,3 +46,11 @@ export const totalOnBoard = (
     return "";
   }
 };
+
+export const valueToFixed = (value: any, length = 2) => {
+  if(verifyIfValueIsNumber(value)){
+    return value.toFixed(length)
+  } else {
+    return ""
+  }
+}
