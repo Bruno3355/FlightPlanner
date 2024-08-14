@@ -1,6 +1,6 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useCalculationsData } from "../../hooks/CalculationsDataContext";
 import Card from "../../molecules/Card/Card";
-import { CalculationsDataContext } from "@/app/page";
 import isNumberKey from "@/app/lib/functions/isNumberKey/isNumberKey";
 import { valueToFixed } from "@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions";
 
@@ -42,8 +42,8 @@ interface weightAndBalanceCalculations {
   landingMomentum: number | null;
 }
 
-export default function weightAndBalanceCalculationsCard() {
-  const { globalValues, setGlobalValues } = useContext(CalculationsDataContext);
+export default function WeightAndBalanceCalculationsCard() {
+  const { globalValues } = useCalculationsData();
 
   const [
     weightAndBalanceCalculationsData,
@@ -231,7 +231,8 @@ export default function weightAndBalanceCalculationsCard() {
     tripFuelMomentum,
     landingWeight,
     landingArm,
-    landingMomentum
+    landingMomentum,
+    tripFuelArm
   ]);
 
   return (
@@ -331,7 +332,7 @@ export default function weightAndBalanceCalculationsCard() {
           <tr>
             <th scope="row">Fuel (_ Gal x 2,73 kgf/Gal)</th>
             <td>
-              {globalValues.totalGallons * (2.73) || ""}
+              {globalValues.totalGallons && (globalValues.totalGallons * (2.73) || "")}
             </td>
 
             <td>2,413</td>
@@ -345,7 +346,7 @@ export default function weightAndBalanceCalculationsCard() {
           </tr>
           <tr>
             <th scope="row">Trip Fuel (_ Gal x 2,73 kgf/Gal)</th>
-            <td>{globalValues && (globalValues.stepGallons * 2.73)}</td>
+            <td>{globalValues.stepGallons && (globalValues.stepGallons * 2.73)}</td>
             <td>2,413</td>
             <td>
               {valueToFixed(tripFuelMomentum) || ""}

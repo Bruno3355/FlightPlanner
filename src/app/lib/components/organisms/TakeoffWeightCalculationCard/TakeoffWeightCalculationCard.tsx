@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import { useCalculationsData } from "../../hooks/CalculationsDataContext";
 import Card from "../../molecules/Card/Card";
-import { CalculationsDataContext } from "@/app/page";
 import isNumberKey from "@/app/lib/functions/isNumberKey/isNumberKey";
 import { verifyIfValueIsNumber } from "@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions";
 
@@ -14,7 +14,7 @@ interface takeoffWeightCalculation {
 }
 
 export default function TakeoffWeightCalculationCard() {
-  const { globalValues } = useContext(CalculationsDataContext);
+  const { globalValues } = useCalculationsData();
   const [takeoffWeightCalculationData, setTakeoffWeightCalculationData] =
     useState<takeoffWeightCalculation>({
       totalOnBoardTime: null,

@@ -1,8 +1,7 @@
 "use client";
-import { useState, createContext } from "react";
+import { useState, ReactNode, FC } from "react";
 import Image from "next/image";
 
-import Card from "./lib/components/molecules/Card/Card";
 import SidebarMenu from "./lib/components/organisms/SidebarMenu/SidebarMenu";
 import Stripes from "./lib/components/molecules/Stripes/Stripes";
 import FourGridContainer from "./lib/components/templates/FourGridContainer/FourGridContainer";
@@ -10,24 +9,11 @@ import FlightReleaseCard from "./lib/components/organisms/FlightReleaseCard/Flig
 import WeightAndBalanceCalculationsCard from "./lib/components/organisms/WeightAndBalanceCalculationsCard/WeightAndBalanceCalculationsCard";
 import TakeoffWeightCalculationCard from "./lib/components/organisms/TakeoffWeightCalculationCard/TakeoffWeightCalculationCard";
 import SaveFlightPlan from "./lib/components/organisms/SaveFlightPlan/SaveFlightPlan";
+import { CalculationsDataProvider } from "./lib/components/hooks/CalculationsDataContext";
 
-interface globalValuesInterface {
-  stepGallons: number | null;
-  minimumRequired: number | null;
-  totalGallons: number | null;
-}
-
-
-export const CalculationsDataContext = createContext<any>({});
-
-export default function Home() {
-  const [buttonHover, setButtonHover] = useState<boolean | null>();
-  const [active, setActive] = useState<boolean | null>(false);
-  const [globalValues, setGlobalValues] = useState<globalValuesInterface>({
-    stepGallons: null,
-    minimumRequired: null,
-    totalGallons: null,
-  });
+const Home: FC = () => {
+  const [buttonHover, setButtonHover] = useState<boolean | null>(null);
+  const [active, setActive] = useState<boolean>(false);
 
   return (
     <div className="w-screen h-screen relative bg-primary overflow-hidden">
@@ -69,19 +55,18 @@ export default function Home() {
         </button>
       </main>
 
-      <SidebarMenu active={active} setActive={setActive}/>
+      <SidebarMenu active={active} setActive={setActive} />
 
       <FourGridContainer active={active}>
-        <CalculationsDataContext.Provider
-          value={{ globalValues, setGlobalValues }}
-        >
+        <CalculationsDataProvider>
           <FlightReleaseCard />
           <TakeoffWeightCalculationCard />
           <WeightAndBalanceCalculationsCard />
           <SaveFlightPlan />
-          
-        </CalculationsDataContext.Provider>
+        </CalculationsDataProvider>
       </FourGridContainer>
     </div>
   );
 }
+
+export default Home;

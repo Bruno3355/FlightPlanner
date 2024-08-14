@@ -31,6 +31,21 @@ export const totalGallonsPerMinute = (obj: any) => {
   }
 };
 
+export  const totalBoardGallons = (additional: any, minimumRequired: any) => {
+  if (
+    verifyIfValueIsNumber(additional) &&
+    minimumRequired &&
+    verifyIfValueIsNumber(minimumRequired) &&
+    additional
+  ) {
+    const totalGallons = totalGallonsPerMinute(additional)
+    return (
+      minimumRequired +
+      totalGallons
+    );
+  }
+};
+
 export const totalOnBoard = (
   step: any,
   alternate: any,

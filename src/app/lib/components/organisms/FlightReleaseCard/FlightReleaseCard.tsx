@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from "react";
-import { CalculationsDataContext } from "@/app/page";
+import { useState, useEffect, useMemo } from "react";
+import {useCalculationsData} from "../../hooks/CalculationsDataContext"
 import Card from "../../molecules/Card/Card";
 import {
   minimumRequiredTime,
@@ -7,6 +7,7 @@ import {
   totalGallonsPerMinute,
   totalOnBoard,
   converTimeToMinutes,
+  totalBoardGallons
 } from "@/app/lib/functions/FlightReleaseFunctions/FlightReleaseFunctions";
 
 interface FlightRelease {
@@ -19,7 +20,7 @@ interface FlightRelease {
 }
 
 export default function FlightReleaseCard() {
-  const { setGlobalValues } = useContext(CalculationsDataContext);
+  const { setGlobalValues } = useCalculationsData();
   const [flightReleaseData, setFlightReleaseData] = useState<FlightRelease>({
     step: null,
     alternate: null,
@@ -28,6 +29,7 @@ export default function FlightReleaseCard() {
     additional: null,
     totalGallons: null,
   });
+
 
   const updateFlightReleaseData = (objectKey: string, value: number | null) => {
     setFlightReleaseData((prev) => {
@@ -67,34 +69,23 @@ export default function FlightReleaseCard() {
     updateFlightReleaseData(key, minutes);
   };
 
-  const totalBoardGallons = () => {
-    if (
-      verifyIfValueIsNumber(flightReleaseData.additional) &&
-      flightReleaseData.minimumRequired &&
-      verifyIfValueIsNumber(flightReleaseData.minimumRequired) &&
-      flightReleaseData.additional
-    ) {
-      return (
-        flightReleaseData.minimumRequired +
-        totalGallonsPerMinute(flightReleaseData.additional)
-      );
-    }
-  };
-
-  useEffect(() => {
-    setGlobalValues((prev: any) => ({
-      ...prev,
+  const flightDataMemo = useMemo(() => {
+    return {
       stepGallons: totalGallonsPerMinute(flightReleaseData.step),
       minimumRequired: flightReleaseData.minimumRequired,
-      totalGallons: totalBoardGallons(),
-    }));
-  }, [
-    flightReleaseData.step,
-    flightReleaseData.alternate,
-    flightReleaseData.reserve,
+      totalGallons: totalBoardGallons(flightReleaseData.additional, flightReleaseData.minimumRequired)
+    }
+  }, [flightReleaseData.step,
     flightReleaseData.additional,
-    setGlobalValues,
-  ]);
+    flightReleaseData.minimumRequired
+    ])
+
+    useEffect(() => {
+      setGlobalValues((prev: any) => ({
+        ...prev,
+        ...flightDataMemo
+      }))
+    }, [flightDataMemo, setGlobalValues])
 
   return (
     <Card
@@ -195,7 +186,7 @@ export default function FlightReleaseCard() {
                 flightReleaseData.additional
               )}
             </td>
-            <td>{totalBoardGallons()}</td>
+            <td>{totalBoardGallons(flightReleaseData.additional, flightReleaseData.minimumRequired)}</td>
           </tr>
         </tfoot>
       </table>

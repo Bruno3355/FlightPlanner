@@ -1,4 +1,5 @@
 import {ComponentProps} from 'react'
+import Image from 'next/image';
 
 export interface AppProps extends ComponentProps<'button'> {
     children?: any,
@@ -23,7 +24,7 @@ export default function SidebarButton(props: AppProps) {
 
 
 
-{props.buttonOnFocus !== props.alt ? <img src={props.src} alt={props.alt} className='columns-2'/>    : <img src={props.focusIcon} alt={props.alt} className='columns-2'/>    }  
+{props.buttonOnFocus !== props.alt ? <Image src={props.src} alt={props.alt} className='columns-2 w-auto h-auto' width={30} height={32}/>    : <Image src={props.focusIcon} alt={props.alt} className='columns-2 w-auto h-auto' width={30} height={32}/>    }  
     </button>
   )
 }

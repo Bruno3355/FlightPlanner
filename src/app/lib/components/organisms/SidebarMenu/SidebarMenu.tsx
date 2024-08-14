@@ -5,7 +5,7 @@ import SidebarButton from '../../molecules/SidebarButton/SidebarButton';
 
 export interface AppProps {
     active: boolean | null ;
-    setActive: Dispatch<SetStateAction<boolean | null>>;
+    setActive: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function SidebarMenu(props: AppProps) {
